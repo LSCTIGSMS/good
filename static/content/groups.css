@@ -1,0 +1,281 @@
+
+    .circleBase {
+        border-radius: 50%;
+        behavior: url(PIE.htc); /* remove if you don't care about IE8 */
+    }
+    
+    #draggable {
+        width: 100px;
+        height: 100px;
+        background: white;
+        border: 5px solid white;
+        cursor:move;
+    }
+    
+    #draggable2 {
+        width: 100px;
+        height: 100px;
+        background: aqua;
+        border: 5px solid blue;
+    }
+    
+    .container{width: 1600px;}
+    
+    
+    
+    .panel.with-nav-tabs .panel-heading{
+        padding: 5px 5px 0 5px;
+    }
+    .panel.with-nav-tabs .nav-tabs{
+        border-bottom: none;
+    }
+    .panel.with-nav-tabs .nav-justified{
+        margin-bottom: -1px;
+    }
+    /********************************************************************/
+    /*** PANEL DEFAULT ***/
+    .with-nav-tabs.panel-default .nav-tabs > li > a,
+    .with-nav-tabs.panel-default .nav-tabs > li > a:hover,
+    .with-nav-tabs.panel-default .nav-tabs > li > a:focus {
+        color: #777;
+    }
+    .with-nav-tabs.panel-default .nav-tabs > .open > a,
+    .with-nav-tabs.panel-default .nav-tabs > .open > a:hover,
+    .with-nav-tabs.panel-default .nav-tabs > .open > a:focus,
+    .with-nav-tabs.panel-default .nav-tabs > li > a:hover,
+    .with-nav-tabs.panel-default .nav-tabs > li > a:focus {
+        color: #777;
+        background-color: #ddd;
+        border-color: transparent;
+    }
+    .with-nav-tabs.panel-default .nav-tabs > li.active > a,
+    .with-nav-tabs.panel-default .nav-tabs > li.active > a:hover,
+    .with-nav-tabs.panel-default .nav-tabs > li.active > a:focus {
+        color: #555;
+        background-color: #fff;
+        border-color: #ddd;
+        border-bottom-color: transparent;
+    }
+    .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu {
+        background-color: #f5f5f5;
+        border-color: #ddd;
+    }
+    .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu > li > a {
+        color: #777;   
+    }
+    .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu > li > a:hover,
+    .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu > li > a:focus {
+        background-color: #ddd;
+    }
+    .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu > .active > a,
+    .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu > .active > a:hover,
+    .with-nav-tabs.panel-default .nav-tabs > li.dropdown .dropdown-menu > .active > a:focus {
+        color: #fff;
+        background-color: #555;
+    }
+    /********************************************************************/
+    /*** PANEL PRIMARY ***/
+    .with-nav-tabs.panel-primary .nav-tabs > li > a,
+    .with-nav-tabs.panel-primary .nav-tabs > li > a:hover,
+    .with-nav-tabs.panel-primary .nav-tabs > li > a:focus {
+        color: #fff;
+    }
+    .with-nav-tabs.panel-primary .nav-tabs > .open > a,
+    .with-nav-tabs.panel-primary .nav-tabs > .open > a:hover,
+    .with-nav-tabs.panel-primary .nav-tabs > .open > a:focus,
+    .with-nav-tabs.panel-primary .nav-tabs > li > a:hover,
+    .with-nav-tabs.panel-primary .nav-tabs > li > a:focus {
+        color: #fff;
+        background-color: #3071a9;
+        border-color: transparent;
+    }
+    .with-nav-tabs.panel-primary .nav-tabs > li.active > a,
+    .with-nav-tabs.panel-primary .nav-tabs > li.active > a:hover,
+    .with-nav-tabs.panel-primary .nav-tabs > li.active > a:focus {
+        color: #428bca;
+        background-color: #fff;
+        border-color: #428bca;
+        border-bottom-color: transparent;
+    }
+    .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu {
+        background-color: #428bca;
+        border-color: #3071a9;
+    }
+    .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > li > a {
+        color: #fff;   
+    }
+    .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > li > a:hover,
+    .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > li > a:focus {
+        background-color: #3071a9;
+    }
+    .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > .active > a,
+    .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > .active > a:hover,
+    .with-nav-tabs.panel-primary .nav-tabs > li.dropdown .dropdown-menu > .active > a:focus {
+        background-color: #4a9fe9;
+    }
+    
+    
+    
+    .mytable a:link {
+        color: #fff;
+        font-weight: bold;
+        text-decoration:none;
+    }
+    .mytable a:visited {
+        color: #fff;
+        font-weight:bold;
+        text-decoration:none;
+    }
+    .mytable a:active, .mytable a:hover {
+        color: #bd5a35;
+        text-decoration:underline;
+    }
+    table.mytable {
+        width:100%;
+        font-family:Arial, Helvetica, sans-serif;
+        color:#666;
+        /* margin-left:auto;
+        margin-right:auto; */
+        font-size:12px;
+        background:#eaebec;
+        border:#ccc 1px solid;
+        -moz-border-radius:3px;
+        -webkit-border-radius:3px;
+        border-radius:3px;
+        /* -moz-box-shadow: 10px 10px 5px #888;
+        -webkit-box-shadow: 10px 10px 5px #888; */
+        /* box-shadow: 10px 10px 5px #888; */
+    }
+    .mytable th {
+        color:#fff;
+        /* padding:21px 25px 22px 25px; */
+        border-top:1px solid #fafafa;
+        border-bottom:1px solid #e0e0e0;
+        background:#191970;
+    }
+    .mytable th:first-child {
+        text-align: left;
+        padding-left:2px;
+    }
+    .mytable tr {
+        text-align: left;
+        padding-left:2px;
+    }
+    .mytable tr td:first-child {
+        text-align: left;
+        padding-left:2px;
+        border-left: 0;
+    }
+    .mytable tr td {
+        /* padding:18px; */
+        border-top: 1px solid #ffffff;
+        border-bottom:1px solid #e0e0e0;
+        border-left: 1px solid #e0e0e0;
+        background: #fafafa;
+        background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafa fa));
+        background: -moz-linear-gradient(top, #fbfbfb, #fafafa);
+    }
+    .mytable tr.even td {
+        background: #f6f6f6;
+        background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6 f6));
+        background: -moz-linear-gradient(top, #f8f8f8, #f6f6f6);
+    }
+    .mytable tr:last-child td {
+        border-bottom:0;
+    }
+    .mytable tr:last-child td:first-child {
+        -moz-border-radius-bottomleft:3px;
+        -webkit-border-bottom-left-radius:3px;
+        border-bottom-left-radius:3px;
+    }
+    .mytable tr:last-child td:last-child {
+        -moz-border-radius-bottomright:3px;
+        -webkit-border-bottom-right-radius:3px;
+        border-bottom-right-radius:3px;
+    }
+    .mytable tr:hover td {
+        background: #f2f2f2;
+        transform:scale(1.01);
+        padding-left:2px;
+        outline:1px solid #191970;
+        -moz-box-shadow: 10px 10px 5px #888;
+        -webkit-box-shadow: 10px 10px 5px #888;
+        box-shadow: 10px 10px 5px #888;
+    }
+    
+    
+    
+    
+    .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 40px;
+        left: 0;
+        background-color:#28a745;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding: 5px;
+    }
+    
+    .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+    }
+    
+    .sidenav a:hover {
+        color: #f1f1f1;
+    }
+    
+    @media screen and (max-height: 450px) {
+      .sidenav {padding-top: 15px;}
+      .sidenav a {font-size: 18px;}
+    }
+    .panel-heading {background-color: red!important}
+
+
+    .box{
+        width: 100px;
+        height: 100px;
+        border: solid thin black;
+        position: absolute;
+        cursor: pointer;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        -webkit-box-shadow:  3px 3px 2px 2px rgba(1, 1, 1, .3);
+        box-shadow:  3px 3px 2px 2px rgba(1, 1, 1, .3);
+        text-align: center;
+        font-weight: bold;
+        color: black;
+        padding-top: 5px;
+        font-family: Verdana;
+    }
+    .box1{
+        background-color: green;
+    }
+    .box2{
+        background-color: yellow;
+    }
+    #line{
+        width: 10px;
+        height: 1px;
+        border: solid thin gray;
+        position: absolute;
+        background-color: gray;
+        -webkit-border-radius: 1px;
+        -moz-border-radius: 1px;
+        border-radius: 1px;
+        z-index: 10000;
+    }
+    .kennykee-styles{
+        font-size: 20px; 
+        font-family: Arial; 
+        margin: 10px; 
+        font-weight:bold;
+    }

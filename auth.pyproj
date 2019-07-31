@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{e0dcfa0d-8517-42db-ae29-34726cfcab41}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>app.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>Global|PythonCore|3.6</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="requirements.txt" />
+    <Content Include="static\content\bootstrap-datetimepicker.min.css" />
+    <Content Include="static\content\bootstrap-sortable.css" />
+    <Content Include="static\content\bootstrap-theme.css" />
+    <Content Include="static\content\bootstrap-theme.min.css" />
+    <Content Include="static\content\bootstrap.css" />
+    <Content Include="static\content\bootstrap.min.css" />
+    <Content Include="static\content\date_picker.css" />
+    <Content Include="static\content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="static\content\font_awsome.css" />
+    <Content Include="static\content\img\checked.gif" />
+    <Content Include="static\content\img\searchicon.png" />
+    <Content Include="static\content\img\unchecked.gif" />
+    <Content Include="static\content\jquery.mobile-1.4.5.css" />
+    <Content Include="static\content\jquery.mobile-1.4.5.min.css" />
+    <Content Include="static\content\jquery.timepicker.css" />
+    <Content Include="static\content\pivot.css" />
+    <Content Include="static\content\sb-admin-2.min.css" />
+    <Content Include="static\content\site.css" />
+    <Content Include="static\content\tablesort.css" />
+    <Content Include="static\content\test.css" />
+    <Content Include="static\content\validation.css" />
+    <Content Include="static\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="static\scripts\bootstrap-datepicker.js" />
+    <Content Include="static\scripts\bootstrap-datetimepicker.js" />
+    <Content Include="static\scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="static\scripts\bootstrap-sortable.js" />
+    <Content Include="static\scripts\bootstrap-timepicker.js" />
+    <Content Include="static\scripts\bootstrap.js" />
+    <Content Include="static\scripts\bootstrap.min.js" />
+    <Content Include="static\scripts\buttons.html5.min.js" />
+    <Content Include="static\scripts\collapse.js" />
+    <Content Include="static\scripts\d3_renderers.js" />
+    <Content Include="static\scripts\date_picker.css" />
+    <Content Include="static\scripts\date_picker.js" />
+    <Content Include="static\scripts\htmltopdf.js" />
+    <Content Include="static\scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="static\scripts\jquery-1.10.2.js" />
+    <Content Include="static\scripts\jquery-1.10.2.min.js" />
+    <Content Include="static\scripts\jquery-1.8.3.min.js" />
+    <Content Include="static\scripts\jquery-ui.css" />
+    <Content Include="static\scripts\jquery.datetimepicker.js" />
+    <Content Include="static\scripts\jquery.filedrop.js" />
+    <Content Include="static\scripts\jquery.floatThead.js" />
+    <Content Include="static\scripts\jquery.mobile-1.4.5.min.js" />
+    <Content Include="static\scripts\jquery.steps.min.js" />
+    <Content Include="static\scripts\jquery.tablesorter.min.js" />
+    <Content Include="static\scripts\jquery.timepicker.js" />
+    <Content Include="static\scripts\jquery.validate-vsdoc.js" />
+    <Content Include="static\scripts\jquery.validate.js" />
+    <Content Include="static\scripts\jquery.validate.min.js" />
+    <Content Include="static\scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="static\scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="static\scripts\jspdf.min.js" />
+    <Content Include="static\scripts\mask.js" />
+    <Content Include="static\scripts\modernizr-2.6.2.js" />
+    <Content Include="static\scripts\moment.js" />
+    <Content Include="static\scripts\pdfmake.min.js" />
+    <Content Include="static\scripts\pivot.js" />
+    <Content Include="static\scripts\respond.js" />
+    <Content Include="static\scripts\respond.min.js" />
+    <Content Include="static\scripts\sb-admin-2.js" />
+    <Content Include="static\scripts\sb-admin-2.min.js" />
+    <Content Include="static\scripts\tablesort.js" />
+    <Content Include="static\scripts\taffy.js" />
+    <Content Include="static\scripts\transition.js" />
+    <Content Include="static\scripts\upload.js" />
+    <Content Include="static\scripts\validate.additional-methods.js" />
+    <Content Include="static\scripts\_references.js" />
+    <Content Include="templates\admin\HTMLPage1.html" />
+    <Content Include="templates\admin\index.html" />
+    <Content Include="templates\base.html" />
+    <Content Include="templates\index.html" />
+    <Content Include="templates\layout.html" />
+    <Content Include="templates\my_master.html" />
+    <Content Include="templates\security\login_user.html" />
+    <Content Include="templates\security\register_user.html" />
+    <Content Include="templates\security\_macros.html" />
+    <Content Include="templates\security\_menu.html" />
+    <Content Include="templates\security\_messages.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="app.py" />
+    <Compile Include="config.py" />
+    <Compile Include="module1.py" />
+    <Compile Include="routs.py" />
+    <Compile Include="__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="uploads\" />
+    <Folder Include="static\" />
+    <Folder Include="static\content" />
+    <Folder Include="static\content\fonts" />
+    <Folder Include="static\content\img" />
+    <Folder Include="static\fonts" />
+    <Folder Include="static\scripts" />
+    <Folder Include="templates" />
+    <Folder Include="templates\admin" />
+    <Folder Include="templates\security" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.6" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>

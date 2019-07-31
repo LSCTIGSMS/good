@@ -1,0 +1,2031 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{{ super() }}
+
+<script src="/static/scripts/jquery-1.10.2.js"></script>
+<script src="/static/scripts/jquery.tablesorter.min.js"></script>
+
+
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" /> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
+<script src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"> -->
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+
+
+                        {% if not current_user.is_authenticated %}
+
+<div class="center">
+    <a class="btn btn-primary" href="{{ url_for('security.login') }}">login</a>
+    <!--<a class="btn btn-default" href="{{ url_for('security.register') }}">register</a>-->
+</div>
+                        {% endif %}
+<!--<p>
+    <a class="btn btn-primary" href="/"><i class="glyphicon glyphicon-chevron-left"></i> Back</a>
+</p>-->
+                        {% if current_user.is_authenticated %}
+
+
+
+
+<div id="tabs" class="container">
+   
+    <ul class="nav nav-tabs">
+        <li id="sms_tab"><a data-toggle="tab" onclick="load_sms()" href="#menu1">Send Message</a></li>
+        <li class="active"><a data-toggle="tab" href="#menu0" onclick="hide_sms_tab()">History</a></li>
+        <li><a data-toggle="tab" href="#menu2" onclick="load_simple_phone_book('Active')">Contacts</a></li>
+        <!-- <li><a data-toggle="tab" href="#menu3" onclick='load_convo()'>Conversation</a></li> -->
+        <!-- onclick='load_convo()' -->
+    </ul>
+
+    <div class="tab-content">
+        <div id="menu0" class="tab-pane fade in active">
+                
+                        
+        
+            <div id="convo_list_holder">
+
+            </div>
+        
+        
+
+        </div>
+        <div id="menu1" class="tab-pane">
+            <div id="phone_book" class="scroll_phone_book tab-pane" style="position:fixed;top:120px;bottom:30px;overflow-y:scroll;">
+
+
+                <div id="top_button_holder" style="margin-bottom:10px;">
+    
+                </div>
+        
+                <div id="convo_holder">
+    
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 col-sm-offset-0">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="message_holder" class="tab-pane active"        style="float:right;clear:both">
+                                        <form id="upload-form" method="POST" enctype="multipart/form-data">
+                                            <div class="row" style="margin-top:20px;">
+                                                <div class='col-sm-3'>
+                                                    <div class="form-group">
+    
+                                                        <span hidden="hidden" id="hidden_phone_number">{{phone_number}}</span>
+                                                        <input hidden="hidden" type="text" id="media_id" name="media_id"/>
+                                                        <p>
+                                                            Date to Send (Optional):
+                                                            <div class='input-group date' id='date'>
+                                                                <input type='text' name="form_date" id="form_date" class="form-control" />
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                </span>
+                                                            </div>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="row">
+                                                <div class='col-sm-3'>
+                                                    <div class="form-group">                         Time to Send (Optional):
+                                                        <div class='input-group time' id='time'>
+                                                            <input type='text' name="form_time" id="form_time" class="form-control" />
+                                                            <span class="input-group-addon">
+                                                                <span class="glyphicon glyphicon-time"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class='col-sm-12'>
+                                                    <div id="phone_holder" class="form-group">
+                                                        Phone:
+                                                        <div class='input-group time' id=''>
+                                                            <input name="phone" id="phone" type="text" value="(714) 902-8122" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class='col-sm-6'>
+                                                    <div class="form-group">
+                                                        <!--<button type="button" onclick="learn()">Learn</button>-->
+                                                        Text Message:
+                                                        <textarea name="textarea" id="textarea_1" class="form-control"></textarea>
+                                                        <!-- <a style="margin-top:5px;" class="btn btn-success" onclick="toggleStartStop()" href="#">
+                                                            <i class="fa fa-microphone fa-lg"></i> Record
+                                                        </a> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class='col-sm-6'>
+                                                    Attach File (Optional): <br />
+                                                    <label class="btn btn-default">
+                                                        Attach File.
+                                                        <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" />-->
+                                                        <label for="upload">
+                                                            <!--<span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>-->
+                                                            <input id="file-picker"  style="display:none" class="btn btn-primary" style="width:98%;" type="file" name="file" accept="image/*" multiple>
+                                                            
+                                                        </label>  
+                                                    </label>
+                                                    <div id="selectedFiles"></div>
+                                                    
+                                                    <div id="msg" style="color:red;"></div>
+                                                    <!--<input type="submit" value="Upload!" id="upload-button"  class="btn btn-primary">-->
+    
+                                                    <script>
+                                                        /** Event Listener for the file picker. *This will check the extension for jpg, *jpeg, png, pdf, and doc mime types. It *will only select the file that will be *used in a text message if it meets this *criteria.
+                                                        * 
+                                                        *    @name handleFilePicker(anonymous)
+                                                        *    @listens click
+                                                        */
+                                                        $("#file-picker").change(function () {
+                                                            $("#msg").text("")
+                                                            var input = document.getElementById('file-picker');
+                                                            for (var i = 0; i < input.files.length; i++) {
+                                                                var ext = input.files[i].name.substring(input.files[i].name.lastIndexOf('.') + 1).toLowerCase()
+                                                                if ((ext == 'jpg') || (ext == 'jpeg') || (ext == 'png') || (ext == 'pdf') || (ext == 'doc')) {
+                                                                    $("#msg").text(input.files[i].name)
+                                                                }
+                                                                else {
+                                                                    $("#msg").text("ATTACHEMENT FAILED!  Only .jpg, .jpeg,.png, .pdf, and .doc file types are allowed.")
+                                                                    document.getElementById("file-picker").value = "";
+                                                                }
+                                                            }
+                                                        });
+                                                    </script>
+    
+    
+    
+                                                </div>
+                                            </div>
+    
+    
+                                            <div class="row">
+                                                <div class='col-sm-12'>
+                                                    <div class="form-group">
+                                                        <br /><br />
+                                                        <input type="button" id="submit" data-inline="true"  value="Send" class="btn btn-primary" />
+    
+                                                        <br /><br />
+                                                        Status: <span id="phone_book_edit_new_or_old" style="color:rebeccapurple" class="value"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+        
+                    
+                    
+            </div>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+
+            <div id="phone_book2" class="tab-pane" style="margin-top:10px;">
+
+
+                <div id="top_button_holder" style="margin-bottom:10px;">
+
+                    <button type="button" id="new_contact_button" onclick=show_contact_list() href="#myPopupDialog" data-rel="popup" data-position-to="window" data-transition="fade" role="button" class="btn btn-primary">New</button>
+                    <button type="button" id="send_text_button" class="btn btn-primary" onclick="load_sms()">SMS</button>
+
+                    <button type="button" id="hide_inactive_contacts_button" class="btn btn-primary" onclick="load_simple_phone_book('Active')">Active</button>
+                    <button type="button" id="show_inactive_contacts_button" class="btn btn-primary" onclick="load_simple_phone_book('Inactive')">Inactive</button>
+
+                    <!--<button type="button" id="send_email_button" class="btn btn-primary">Send Email</button>
+                    <button type="button" id="send_voice_button" class="btn btn-primary">Voice Call</button>-->
+
+                </div>
+
+                
+                <div id="search" class="form-group has-feedback" style="width:300px;margin-left:20px;">
+                    <label class="control-label">Search</label>
+                    <input type="text"  autofocus id="myInput" onkeyup="myFunction()" class="form-control" placeholder="Search" aria-label="Username" aria-describedby="basic-addon1">
+                    <i class="form-control-feedback glyphicon glyphicon-search"></i>
+                </div>
+                 
+               
+
+                <div id="phone_list_holder">
+                    <!--<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">-->
+                </div>
+
+                <div id="myPopupDialog">
+                    <form action="" id="edit_phone_book" name="edit_phone_book" class="panel-heading">
+                        <div id="contact_error_dialog" style="display: none">a</div>
+                        <div class="row">
+                            <div class='col-sm-3'>
+                                Current Status
+                                <div class="form-group">
+                                    <select class="form-control" type="select" id="phone_book_active" name="phone_book_active">
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                        <!--<option style="color:red;" value="Delete">Delete</option>-->
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- <div class='col-sm-3'>
+                                Type of Contact
+                                <div class="form-group">
+                                    <select class="form-control" id="phone_book_type" name="phone_book_type"><option value="Client">Client</option><option value="Attorney">Attorney</option></select>
+                                </div>
+                            </div> -->
+                            <div class='col-sm-3'>
+                                Email (opt)
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="phone_book_email" name="phone_book_email" />
+                                </div>
+                            </div>
+                            <div class='col-sm-3'>
+                                Assigned to
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="phone_book_case_number" id="phone_book_case_number" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class='col-sm-3'>
+                                First Name
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="phone_book_first_name" name="phone_book_first_name" />
+                                </div>
+                            </div>
+                            <div class='col-sm-3'>
+                                Last Name
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="phone_book_last_name" name="phone_book_last_name" />
+                                </div>
+                            </div>
+                            <div class='col-sm-3'>
+                                Phone Number
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="phone_book_number" name="phone_book_number" class=" phone" />
+                                </div>
+                            </div>
+                          
+                            <!-- <div id='twilio_phone_number_div' class='col-sm-3'>
+                                Twilio Phone Number (Staff Only)
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="twilio_phone_number" name="phone_book_number" class=" phone" />
+                                </div>
+                            </div> -->
+
+                            <div class='col-sm-6'>
+                                Notes (opt)
+                                <div class="form-group">
+                                    <textarea class="form-control" name="phone_book_notes" id="phone_book_notes"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class='col-sm-12'>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" data-inline="true" onclick="update_contact()">Save</button>
+                                    <button type="button" id="reload_contact_button" onclick="hide_contact_list()" class="btn btn-primary">Cancel</button>
+                                    <button type="button" data-toggle="modal" data-target="#myModal" id="delete_contact_button" class="btn btn-danger" style="float:right;clear:none;">Delete Contact</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label id="id" name="id">new</label>
+                        Status: <span style="color:rebeccapurple" class="value2"></span>
+
+                        <div class="container">
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal" role="dialog">
+                                <div class="modal-dialog">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Delete Contact</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>This will permanently delete this contact.  To just hide a contact you can change the contact's Status to Inactive.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="delete_contact()">Yes, delete this contact</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </form>
+                </div>
+
+
+
+                <div hidden="hidden" id="conversation_holder">
+
+                    blah
+                </div>
+
+
+                
+
+
+            </div>
+
+
+
+        </div>
+        <div id="menu3" class="tab-pane fade">
+
+
+
+        </div>
+       
+    </div>
+</div>
+
+ {% endif %}
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="img01">
+    <div id="caption"></div>
+</div>
+
+<!-- Creates the bootstrap modal where the image will appear -->
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog"  style="width:900px;">
+        <div class="modal-content" style="width:800px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Image preview</h4>
+            </div>
+            <div class="modal-body"  style="width:750px;">
+                <img src="" id="imagepreview"  style="width:700px;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Initialize input fields such as date/time picker (Bootstrap) and Phone number formatting
+    $(":input").inputmask();
+    var timepicker = $("#time").datetimepicker({
+        format: 'LT'
+    });var timepicker = $("#time").datetimepicker({
+        format: 'LT'
+    });
+    var timepicker = $("#date").datetimepicker({
+        format: 'MM/DD/YYYY',
+    });
+    $("#phone").inputmask({ "mask": "(999) 999-9999" });
+    $("#phone_book_number").inputmask({ "mask": "(999) 999-9999" });
+    $("#twilio_phone_number").inputmask({ "mask": "(999) 999-9999" });
+// <!-- 
+//     // var recognition = new webkitSpeechRecognition(); //get new instance
+//     // recognition.start(); //start it
+//     recognition.onend = function () { //a function to restart it when it stops
+//         recognition.start();
+//     }
+
+//     recognition.onresult = function (event) {
+//         var whatWasHeard = event.results[0][0].transcript; //get what was heard
+//         document.body.innerHTML = whatWasHeard; //write it to the body
+//     }; -->
+
+
+//     //var data_base = TAFFY();
+//     var recognizing;
+//     // var recognition = new webkitSpeechRecognition();
+//     recognition.continuous = true;
+
+//     reset();
+//     recognition.onend = reset();
+
+//     recognition.onresult = function (event) {
+//         for (var i = event.resultIndex; i < event.results.length; ++i) {
+//             if (event.results[i].isFinal) {
+//                 textarea.value += event.results[i][0].transcript;
+//             }
+//         }
+//     }
+
+//     function reset() {
+
+//         recognizing = false;
+//         //button.innerHTML = "Click to Speak";
+//     }
+
+
+
+
+//     function toggleStartStop() {
+//         if (recognizing) {
+//             recognition.stop();
+//             reset();
+//         } else {
+//             recognition.start();
+//             recognizing = true;
+//             //button.innerHTML = "Click to Stop";
+//         }
+//     }
+    
+    /**
+     *
+     * Used to change between different tabs and show the default view for that tab.
+     * 
+     *  @function change_tab
+     *  @param {integar} - Number of the tab to be displayed. All other tabs will be hidden.
+     * 
+     */
+    function change_tab(x) {
+        if (x == "1") { // message active
+            $("#nav_1").addClass("active");
+            $("#nav_2").removeClass("active");
+            $("#nav_3").removeClass("active");
+            $("#message_holder").show();
+            $("#phone_book").hide();
+            $("#conversation").hide();
+        }
+        if (x == "2") { // phone book active
+            $("#nav_1").removeClass("active");
+            $("#nav_2").addClass("active");
+            $("#nav_3").removeClass("active");
+            $("#message_holder").hide();
+
+            $("#phone_book").show();
+            $("#conversation").hide();
+        }
+        if (x == "3") { // conversation active
+            $("#nav_1").removeClass("active");
+            $("#nav_2").removeClass("active");
+            $("#nav_3").addClass("active");
+            $("#message_holder").hide();
+            $("#phone_book").hide();
+            $("#conversation").show();
+        }
+    }
+    // Indicates when the user is typing in a phone number or message depending on the field they are typing in.
+    $("#phone").keypress(function () {
+        $('.value').html('Typing Phone Number');
+    });
+    $("#message").keypress(function () {
+        $('.value').html('Typing Message');
+    });
+
+    /**
+     * Clears the date in the message form (used for scheduling) 
+     * 
+     * @function delete_date
+     * 
+     */
+    function delete_date() {
+        $("#send_date").val('')
+    }
+
+    /**
+     * Get's the current date in mm/dd/yyyy format
+     * 
+     * @function get_current_date
+     * @returns {string} date in mm/dd/yyyy format.
+     */
+    function get_current_date() {
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+        // Add preceding zeros to month and day. Fields separated by '/'
+        var default_date = (month < 10 ? '0' : '') + month + '/' + (day < 10 ? '0' : '') + day + '/' + d.getFullYear();
+
+        return default_date
+    }
+    /**
+     * Gets the current time in AM/PM format. HH:MM:SS format.
+     * 
+     * @function get_current_time
+     * @returns {string} time in hh:mm [am|pm]
+     * 
+     */
+    function get_current_time() {
+        var d = new Date();
+        var hours = new Date().getHours();
+        var hours = (hours + 24 - 2) % 24; // Based on central time
+        var mid = 'am';
+        if (hours == 0) { //At 00 hours we need to show 12 am
+            hours = 12;
+        }
+        else if (hours > 12) {
+            hours = hours % 12;
+            mid = 'pm';
+        }
+
+        var m = d.getMinutes();
+        if (m <= 9) {
+            m = "0" + m;
+        }
+        var default_time = d.getHours() + ":" + m + " " + mid;
+        return default_time;
+    }
+   
+/**
+ * convert from AM/PM format to Military Time
+ * 
+ *  @function convertTime12to24
+ *  @param {string} time in the form of "12:00 AM"
+ *  @returns {string} time in 24 hour format. Example: "13:45"
+ * 
+ */
+    function convertTime12to24(time12h) {
+        const [time, modifier] = time12h.split(' ');
+
+        let [hours, minutes] = time.split(':');
+
+        if (hours === '12') {
+            hours = '00';
+        }
+
+        if (modifier === 'PM') {
+            hours = parseInt(hours, 10) + 12;
+        }
+
+        return hours + ':' + minutes;
+    }
+
+/**
+ * When the DOM has been loaded, this will bind the submit button's event listener. This will 
+ * handle the sending of a text message when the user submits the information from the form by *sending an AJAX request to the server.
+ * 
+ * @listen DOMContentLoaded
+ * 
+ */
+$(function() {
+    $('#submit').click(function() {
+        event.preventDefault(); // do not reload the page upon submission
+
+        // Inform the user the message is being sent.
+        $('.value').html('Sending...');
+        var path_to_file = $("#multfile-label").text();
+
+        var phone = $("#phone").val();
+        if (phone == "") { // handle blank phone number
+            alert("You must enter a phone number.")
+            $("#phone").focus();
+            return;
+        }
+        phone = phone.replace(/\D/g, ''); //Get rid of non-digits
+
+        var selected_date = $("#form_date").val();
+        if (selected_date == '') { // no date selected, select today's date
+            selected_date = get_current_date();
+        }
+        // Parse time tokens from the form value
+        var time = $("#form_time").val();
+        var new_time = convertTime12to24(time)
+        var hour = new_time.substr(0, new_time.indexOf(':')); 
+        var minute = new_time.split(':').pop().split(':').shift();
+        minute = minute.replace(/^0+/, '');
+        // Handle blank values for hour and minute. Default them to 0.
+        if (hour == "" || hour == undefined || hour == "undefined") {
+            hour = 0;
+        }
+        if (minute == "" || minute == undefined || minute == "undefined") {
+            minute = 0;
+        }
+        
+        var message = $("#textarea_1").val();
+        if (message == "") { // Handle blank text message
+            alert("You must enter text.")
+            $("#textarea_1").focus();
+            return;
+        }
+
+        var d = new Date(selected_date);
+
+        // parse date tokens from form values
+        var year = selected_date.substring(6, 10);
+        year = year.replace(/^0+/, '');
+
+        var month = selected_date.substring(0, 2);
+        month = month.replace(/^0+/, '');
+
+        var day = selected_date.substring(3, 5);
+        day = day.replace(/^0+/, '');
+
+        var media_id = $("#media_id").val();
+        
+        var dateSelected = timepicker.data('DateTimePicker').date();
+      
+        var b = $("#selectedFiles").html();
+        // if (b == "" ) {
+        //     media_id = "";
+        // }
+        // Send AJAX request to SMS Scheduler to dispatch the text message
+        $.ajax({
+            type: 'GET',
+            url: "http://localhost:5000/sms_sched",
+            data: {
+                year: year,
+                month: month,
+                day: day,
+                hour: hour,
+                minute: minute,
+                phone: phone,
+                message: message,
+                case_number: "12345",
+                desc: "Created from Text_Express",
+                media_id: media_id,
+                
+            },
+            error: function (request, status, error) { debugger
+            alert("Error send_text()")  },
+            success: function (data2) { 
+                debugger
+                var mm = $("#msg")
+
+                var m = mm[0].innerHTML;
+                if(m != ""){
+                    // After data has been sent to sms_sched, process another ajax request to upload the document attachment
+                    var form_data = new FormData($('#upload-form')[0]);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/upload',
+                        data: form_data,
+                        contentType: false,
+                        processData: false,
+                        dataType: 'json'
+                    }).done(function(data, textStatus, jqXHR){
+                    
+
+
+                        
+                    }).fail(function(data){
+                        alert('error2!');
+                    });
+                } 
+                media_id = idGen.getId();
+                $("#media_id").val(media_id);
+                load_sms(phone);
+                // clear the message form inputs. Ready to send another text.
+                $("#textarea_1").text("");
+                $("#textarea_1").val("");
+                $("#textarea_1").attr("value", ""); 
+                $("#textarea_1").empty();
+                $("#phone_book_edit_new_or_old").html("");
+                $("#phone_book_edit_new_or_old").val("");
+                $("#phone_book_edit_new_or_old").attr("value", ""); 
+                $("#phone_book_edit_new_or_old").empty();
+                $("#msg").text("");
+                $("#msg").val("");
+                $("#msg").attr("value", ""); 
+                $("#msg").empty();
+                
+             
+            }
+        })
+
+
+       
+    });
+}); 
+
+
+
+
+    
+    function show_options() {
+        $("#options").toggle();
+    }
+
+    function show_time() {
+        $("#time").click();
+
+    }
+    
+
+</script>
+
+
+
+
+<script type="text/javascript">
+    
+    //$(document).ready(function () {
+      
+        // $('th').each(function (col) {
+        //     $(this).hover(
+        //         function () {
+        //             $(this).addClass('focus');
+        //         },
+        //         function () {
+        //             $(this).removeClass('focus');
+        //         }
+        //     );
+
+
+        //     $(this).click(function () {
+        //         if ($(this).is('.asc')) {
+        //             $(this).removeClass('asc');
+        //             $(this).addClass('desc selected');
+        //             sortOrder = -1;
+        //         } else {
+        //             $(this).addClass('asc selected');
+        //             $(this).removeClass('desc');
+        //             sortOrder = 1;
+        //         }
+        //         $(this).siblings().removeClass('asc selected');
+        //         $(this).siblings().removeClass('desc selected');
+        //         var arrData = $('table').find('tbody >tr:has(td)').get();
+
+        //         arrData.sort(function (a, b) {
+        //             var val1 = $(a).children('td').eq(col).text().toUpperCase();
+        //             var val2 = $(b).children('td').eq(col).text().toUpperCase();
+        //             if ($.isNumeric(val1) && $.isNumeric(val2))
+        //                 return sortOrder == 1 ? val1 - val2 : val2 - val1;
+        //             else
+        //                 return (val1 < val2) ? -sortOrder : (val1 > val2) ? sortOrder : 0;
+        //         });
+        //         $.each(arrData, function (index, row) {
+        //             $('tbody').append(row);
+        //         });
+        //     });
+        // });
+        $("#myPopupDialog").hide();
+        //$("#phone_book").hide();
+        //$("#conversation").hide();
+       
+        $("#options").hide();
+        $("#phone").focus();
+        $("#dd").val(get_current_date());
+        $("#time").val(get_current_time());
+       
+
+
+        // $(document).on("click", ".show-page-loading-msg", function () {
+        //     var $this = $(this),
+        //         theme = $this.jqmData("theme") || $.mobile.loader.prototype.options.theme,
+        //         msgText = $this.jqmData("msgtext") || $.mobile.loader.prototype.options.text,
+        //         textVisible = $this.jqmData("textvisible") || $.mobile.loader.prototype.options.textVisible,
+        //         textonly = !!$this.jqmData("textonly");
+        //     html = $this.jqmData("html") || "";
+        //     $.mobile.loading("show", {
+        //         text: msgText,
+        //         textVisible: textVisible,
+        //         theme: theme,
+        //         textonly: textonly,
+        //         html: html
+        //     });
+        // })
+            // .on("click", ".hide-page-loading-msg", function () {
+            //     $.mobile.loading("hide");
+            // });
+
+
+
+        var phone_number = $("#hidden_phone_number").text();
+        $("#phone").val(phone_number);
+
+        // $(".icon-input-btn").each(function () {
+        //     var btnFont = $(this).find(".btn").css("font-size");
+        //     var btnColor = $(this).find(".btn").css("color");
+        //     $(this).find(".glyphicon").css("font-size", btnFont);
+        //     $(this).find(".glyphicon").css("color", btnColor);
+        //     if ($(this).find(".btn-xs").length) {
+        //         $(this).find(".glyphicon").css("top", "24%");
+        //     }
+        // });
+
+        // $(function () {
+        //     // Initialize form validation on the registration form.
+        //     // It has the name attribute "registration"
+        //     $("form[name='registration']").validate({
+        //         // Specify validation rules
+        //         rules: {
+        //             // The key name on the left side is the name attribute
+        //             // of an input field. Validation rules are defined
+        //             // on the right side
+        //             form_date: "required",
+        //             form_time: "required",
+        //             phone: {
+        //                 required: true,
+        //                 // Specify that email should be validated
+        //                 // by the built-in "email" rule
+        //                 email: false
+        //             },
+        //             textarea: {
+        //                 required: true
+        //             }
+        //         },
+        //         // Specify validation error messages
+        //         messages: {
+        //             form_date: "Please enter a Date",
+        //             form_time: "Please enter a Time",
+        //             phone: {
+        //                 required: "Please provide a Phone Number"
+        //             },
+        //             textarea: "Please enter a text Message"
+        //         },
+        //         // Make sure the form is submitted to the destination defined
+        //         // in the "action" attribute of the form when valid
+        //         submitHandler: function (form) {
+        //             form.submit();
+        //         }
+        //     });
+
+
+
+
+        // });
+    //});
+
+
+</script>
+
+
+
+<!--Phone Book-->
+
+
+
+<script type="text/javascript">
+    /** Create a random id generator constructor function
+     * 
+     * @class Generator
+     * @constructor Generator
+     * 
+     */
+    function Generator() { };
+
+    /**
+     * An prototype property used for generating random numbers based on current date/time
+     * 
+     * @member {Generator.prototype.Number} Generator#rand
+     *
+     */
+    Generator.prototype.rand = Math.floor(Math.random() * 26) + Date.now();
+    /**
+     * A prototype method used for generating ids
+     * 
+     * @member {Generator.prototype.Number} Generator#rand
+     * @returns {Number}
+     *
+     */
+    Generator.prototype.getId = function () {
+        return this.rand++;
+    };
+    // create a global instance of the id generator
+    var idGen = new Generator();
+</script>
+
+<script type="text/javascript">
+    // generate a new media ID
+    media_id = idGen.getId();
+    $("#media_id").val(media_id);
+        
+        /**
+         * When the DOM has loaded and it is safe to manipulate.
+         * 
+         * @listen DOMContentLoaded
+         * 
+         */
+        $(document).ready(function () {
+        // Show contact related buttons
+        $('#hide_inactive_contacts_button').show();
+        $('#show_inactive_contacts_button').show();
+        $('#new_contact_button').show();
+        // Hide text,voice, and email buttons
+        $('#send_text_button').hide();
+        $('#send_email_button').hide();
+        $('#send_voice_button').hide();
+        
+        /**
+         * Turn off autocomplete when input gets focus. Event delegation/bubbling to document level.
+         * @callback anonymous
+         * @listen focus 
+         */
+        $(document).on('focus', ':input', function () {
+            $(this).attr('autocomplete', 'off');
+        });
+
+    });
+
+    /**
+     * Hides SMS tab
+     * 
+     * @function hide_sms_tab
+     * 
+     */
+    function hide_sms_tab(){
+        $("#sms_tab").hide();
+        load_convo('single');
+    }
+/**
+ * Load Simplified view of the phone book which shows a table of contacts with the following *headings: Options and client name. Each row should allow you to view SMS messages or edit the *contact
+ * 
+ *@function load_simple_phone_book
+ *@param {string} x - This is the contact type: active or inactive
+ * 
+ */
+    function load_simple_phone_book(x) {
+        hide_sms_tab();
+        $("#edit_phone_book").show();
+        $('#hide_inactive_contacts_button').show();
+        $('#show_inactive_contacts_button').show();
+        $('#new_contact_button').show();
+        $('#send_text_button').hide();
+        $('#send_email_button').hide();
+        $('#send_voice_button').hide();
+        var table = '<table id="phone_book_list" class="table table-striped table-bordered" cellspacing="0" width="100%">';
+        table += '<thead><tr><th>Options</th><th onclick=sortTable(1)>Client</th></tr></thead><tbody>';
+
+        var blah = $('#edit_phone_book').serialize();
+        // Send AJAX request for simple phone book data
+        $.ajax({
+            url: 'http://localhost:5000/load_simple_phone_book',
+            type: 'GET',
+            data: {
+                contact_type: x
+            },
+            error: function (request, status, error) {
+                debugger
+            },
+            success: function (data) {
+                // When the data is received and the call stack is empty, draw the cells of the table.
+                $(data).each(function (i, val) { // numeric index
+                    
+                    var counter = 0;
+                    table += "<tr style='cursor:pointer;'>";
+  
+                    var edit_id = val[0];
+                    $.each(val, function (k, v) { // key/value pair
+                        // Each row contains an id, option to edit or view sms messages, and contact name (first + ' ' + last), but the id is not rendered in a cell
+                        counter++;
+                        if (counter == 1) {
+                        }
+                        if (counter == 2) { // pass the contact_phone number as v in callback
+                            table += "<td><button type='button' class='btn btn-primary' onclick='load_sms(" + v + ")'>SMS</button>"
+                            // pass the contact_id as the edit_id in callback
+                            table += "<button type='button' class='btn btn-primary' style='margin-left:7px;' onclick='edit_contact(" + edit_id + ")'>Edit</button></td>"
+                        }
+                        if (counter == 3 || counter == 4  || counter == 5) {
+                            table += "<td>" + v + "</td>" // Should be first_last name
+                        }
+                      
+                    });
+                    table += "</tr>";
+                });
+                table += '</tbody></table >';
+                hide_contact_list();
+                $("#phone_list_holder").empty();
+                $("#phone_list_holder").append(table); // table is rendered to DOM
+            }
+        });
+    }
+
+    /**
+     * Edit contact will update fields of a phone book entry and update the database
+     * 
+     * @function edit_contact
+     * @param {string} x - This is the contact_type: active or inactive
+     * 
+     */
+    function edit_contact(x) {
+        // Initialize the form
+        $("#phone_book_first_name").val("");
+        $("#phone_book_last_name").val("");
+        $("#phone_book_number").val("");
+        $("#phone_book_email").val("");
+        $("#phone_book_case_number").val("");
+        $("#phone_book_active").val("");
+        $("#phone_book_notes").val("");
+        $("#phone_book_type").val("");
+        $("#twilio_phone_number").val("");
+        // Hide buttons and phone list.
+        $("#delete_contact_button").show();
+        $('#hide_inactive_contacts_button').hide();
+        $('#show_inactive_contacts_button').hide();
+        $('#new_contact_button').hide();
+        $("#phone_book_list").hide();
+        $("#search").hide();
+        
+        $('#send_text_button').show();
+        $('#send_email_button').show();
+        $('#send_voice_button').show();
+
+        $("#phone_book_list_wrapper").hide();
+        $("#myPopupDialog").show();
+        //show_contact_list();
+      
+        // Send request to display the extended phone book view. Sends GET request with the id of the contact. Receives, first_name, last_name, phone number, email, case number, and any notes.
+        $.ajax({
+            url: 'http://localhost:5000/load_extended_phone_book',
+            type: 'GET',
+            data: {
+                id: x
+            },
+            error: function (request, status, error) {
+                debugger
+            },
+            success: function (data) {
+                $(data).each(function (i, val) {
+                    // Display result in the form fields
+                    $("#id").text(val[0]);
+                    $(".value2").text("Edit");
+                    $("#phone_book_first_name").val(val[1]);
+                    $("#phone_book_last_name").val(val[2]);
+                    $("#phone_book_number").val(val[3]);
+                    $("#phone_book_email").val(val[4]);
+                    $("#phone_book_case_number").val(val[5]);
+                    $("#phone_book_active").val(val[6]);
+                    $("#phone_book_notes").val(val[7]);
+                   
+                    var p = val[3];
+
+                    //load_conversation(p);
+                });
+
+            }
+        });
+    }
+
+
+
+    /**
+     * Load Phone number. /load_phone route does not exist
+     * 
+     * @function load_phone_number
+     * @param {} x - type not specified not used. Likely client_type active or inactive.
+     */
+    function load_phone_number(x) {
+        var p = $("#phone_book_number").val();
+        //window.location.href = "http://localhost:5000/load_phone/" + p;
+        window.location.href = "http://localhost:5000/load_phone/" + p;
+    }
+
+    /**
+    * Update contact in phone book. 
+    * 
+    * @function update_contact
+    * @callback update_contact
+    * 
+    * @listens click
+    * 
+    */
+    function update_contact() {
+        debugger
+        // Initialize form inputs
+        $("#edit_phone_book").hide();
+        var is_active = $("#phone_book_active").val();
+        $('#hide_inactive_contacts_button').show();
+        $('#show_inactive_contacts_button').show();
+        $('#new_contact_button').show();
+        $('#send_text_button').hide();
+        $('#send_email_button').hide();
+        $('#send_voice_button').hide();
+        // Initialize variables from form fields
+        var id = $("#id").text();
+        var first_name = $("#phone_book_first_name").val();
+        var last_name = $("#phone_book_last_name").val();
+        var phone_number = $("#phone_book_number").val();
+        phone_number = phone_number.replace(/\D/g, '');
+        
+        // var twilio_phone_number = $("#twilio_phone_number").val();
+        // attorney_phone_number = attorney_phone_number.replace(/\D/g, '');
+
+        var email = $("#phone_book_email").val();
+        var case_number = $("#phone_book_case_number").val();
+        var notes = $("#phone_book_notes").val();
+        var phone_book_id = $("#id").text();
+        var insert_update = $(".value2").text();
+        // var contact_type = $("#phone_book_type").val();
+
+        $("#phone_book_list").show();
+        $("#search").show();
+        // Send AJAX request to update the fields
+        $.ajax({
+            url: 'http://localhost:5000/update_contact',
+            type: 'GET',
+            data: {
+                insert_update: insert_update,
+                phone_book_id: phone_book_id,
+                first_name: first_name,
+                last_name: last_name,
+                phone_number: phone_number,
+                is_active: is_active,
+                email: email,
+                case_number: case_number,
+                notes: notes
+            },
+            error: function (request, status, error) {
+                alert()
+                debugger
+            },
+            success: function (result) {
+                
+                if (result == 'good') {
+                    load_simple_phone_book('Active'); //Load Phone Book
+                }
+                else {
+                    //alert(result);
+                }
+            }
+        });
+    }
+
+
+    /**
+    * Delete Contact. Removes a contact with a given id.
+    * 
+    * @function delete_contact
+    * @callback delete_contact
+    * 
+    */
+    function delete_contact() {
+        
+        var phone_book_id = $("#id").text();
+        // Initialize AJAX request to delete using GET request with id
+        $.ajax({
+            url: 'http://localhost:5000/delete_contact',
+            type: 'GET',
+            data: {
+                phone_book_id: phone_book_id
+            },
+            success: function (result) {
+                show_contact_list(); //Display Contact List
+                load_simple_phone_book('Active'); // Render Simple Phone Book
+            },
+            error: function (request, status, error) {
+            },
+        });
+    }
+
+    /** 
+    * This toggles the display to show contact list on. Clear Phone book forms.
+    * 
+    * @function show_contact_list
+    * @callback show_contact_list
+    * 
+    */
+    function show_contact_list() {
+       
+        $("#phone_book_list").hide();
+        $("#search").hide();
+        $("#delete_contact_button").hide();
+        $('#hide_inactive_contacts_button').hide();
+        $('#show_inactive_contacts_button').hide();
+        $('#new_contact_button').hide();
+
+        $('#send_text_button').hide();
+        $('#send_email_button').hide();
+        $('#send_voice_button').hide();
+
+        $("#id").text("-1");
+        $(".value2").text("Insert");
+        $("#phone_book_first_name").val("");
+        $("#phone_book_last_name").val("");
+        $("#phone_book_number").val("");
+        $("#twilio_phone_number").val("");
+        $("#phone_book_email").val("");
+        $("#phone_book_case_number").val("");
+        $("#phone_book_active").val("Active");
+        $("#phone_book_notes").val("");
+        $("#phone_book_type").val("");
+
+        $("#phone_book_list_wrapper").hide();
+        $("#myPopupDialog").show();
+        $("#edit_phone_book").show();
+      
+    }
+
+    /** 
+    * This toggles off the display for contact list. Clear Phone book forms.
+    * 
+    * @function hide_contact_list
+    * @callback hide_contact_list
+    * 
+    */
+    function hide_contact_list() {
+        $('#hide_inactive_contacts_button').show();
+        $('#show_inactive_contacts_button').show();
+        $('#new_contact_button').show();
+
+        $('#send_text_button').hide();
+        $('#send_email_button').hide();
+        $('#send_voice_button').hide();
+        $("#phone_book_list_wrapper").show();
+        $("#myPopupDialog").hide();
+
+        $("#phone_book_list").show();
+        $("#search").show();
+    }
+    
+    /**
+     * This takes in a phone number and applies a regular expression to specify (ddd) ddd-dddd
+     * 
+     * @function formatPhone
+     * @param {string} phonenum - the Phone number to be tested and returned if invalid
+     * @return {string} phone - The formatted phone number (ddd) ddd-dddd
+     * @return {string} phonenumb - The invalid phone number if incorrect.
+     */
+    function formatPhone(phonenum) {
+        var regexObj = /^(?:\+?1[-. ]?)?(?:\(?([0-9]{3})\)?[-. ]?)?([0-9]{3})[-. ]?([0-9]{4})$/;
+        if (regexObj.test(phonenum)) {
+            var parts = phonenum.match(regexObj);
+            var phone = "";
+            if (parts[1]) { phone += "(" + parts[1] + ") "; }
+            phone += parts[2] + "-" + parts[3];
+            return phone;
+        }
+        else {
+            //invalid phone number
+            return phonenum;
+        }
+    }
+
+
+
+
+
+    //function edit_phone_number(x) {
+    //    var item1 = data_base();
+    //    var sorted_data = item1.filter({ phone_id: x });
+    //    $("#div_1").hide();
+    //    $("#myPopupDialog").show();
+    //    //$("#phone_list_holder").hide();
+
+    //    //$("#delete_contact_button").show();
+
+    //    sorted_data.each(function (r) {
+    //        $("#id").text(r.phone_id);
+    //        $(".value2").text("edit");
+    //        $("#phone_book_first_name").val(r.first_name);
+    //        $("#phone_book_last_name").val(r.last_name);
+    //        var p = formatPhone(r.phone_number);
+    //        $("#phone_book_number").val(p);
+    //        $("#phone_book_email").val(r.email);
+    //        $("#phone_book_case_number").val(r.case_number);
+    //        $("#phone_book_notes").val(r.notes);
+    //        $("#phone_book_active :selected").val(r.is_active);
+    //    });
+
+
+    //}
+
+</script>
+
+
+
+<script type="text/javascript">
+    /**
+    * When the DOM has loaded and it is safe to manipulate.
+    * 
+    * @listen DOMContentLoaded
+    * 
+    */
+    $(document).ready(function () {
+        // Load single conversation when DOM completely finishes loading
+        load_convo('single');
+        $("#sms_tab").hide();
+        // Render icons and set font sizes
+        $(".icon-input-btn").each(function () {
+            var btnFont = $(this).find(".btn").css("font-size");
+            var btnColor = $(this).find(".btn").css("color");
+            $(this).find(".glyphicon").css("font-size", btnFont);
+            $(this).find(".glyphicon").css("color", btnColor);
+            if ($(this).find(".btn-xs").length) {
+                $(this).find(".glyphicon").css("top", "24%");
+            }
+        });
+
+        //$("#delete_contact_button").hide();
+        $("#div_1").show();
+        $("#myPopupDialog").hide();
+        $("#edit_phone_book").hide();
+        $("#phone_list_holder").show();
+        $("#id").text('-1');
+        $(".value2").text("Insert");
+
+        $(function () {
+            // Initialize form validation on the registration form.
+            // It has the name attribute "registration"
+
+            // $("form[name='edit_phone_book']").validate({
+            //     // Specify validation rules
+            //     rules: {
+
+            //         phone_book_first_name: "required",
+            //         phone_book_last_name: "required",
+            //         phone_book_number: "required",
+            //         phone_book_active: "required",
+            //         phone_book_case_number: "required",
+
+            //         phone_book_email: {
+            //             required: false,
+            //             // Specify that email should be validated
+            //             // by the built-in "email" rule
+            //             email: false
+            //         }
+            //     },
+            //     // Specify validation error messages
+            //     messages: {
+            //         phone_book_first_name: "Please enter a First Name",
+            //         phone_book_last_name: "Please enter a Last Name",
+            //         phone_book_number: "Please enter a Phone Number",
+            //         phone_book_active: "Please enter an Active Code",
+            //         phone_book_case_number: "Please enter the Case Number"
+            //     }
+            // });
+
+
+        });
+    });
+
+
+
+
+
+
+</script>
+
+
+
+<!--Conversations-->
+
+
+<script type="text/javascript">
+   // Enum structure for Months
+   var months = [ "January", "February", "March", "April", "May", "June", 
+               "July", "August", "September", "October", "November", "December" ];
+
+    /**
+     * Load SMS
+     * @callback load_sms - load sms messages to be displayed on the sms tab
+     * @param {string} x - passed in by onClick event. Can be a blank value, which will change *behavior of how the conversation that is loaded.
+     *
+     */
+    function load_sms(x){
+        $("#sms_tab").show();
+        load_convo(x);
+        
+        // $("#tabs").tabs("option", "active", 2);
+        $("#textarea_1").focus();
+        if(x == '' || x == undefined){
+            x = $("#phone_book_number").val(); 
+            $('#phone').val(x);
+        }
+        else{
+            $('#phone').val(x);
+        }
+        
+        $('#phone_holder').hide();
+        
+        
+        $('#tabs a[href="#menu1"]').tab('show')
+       
+    }
+    /**
+     * Load conversation with SMS messages and attachments. Used both as a callback and called *within a function.
+     * 
+     * @function load_convo
+     * @callback load_convo
+     * @param list_option - modifies how the SMS messages are displayed. "single" is displayed *on convo_list_holder. Anything else is displayed on convo_holder
+     * 
+     */
+    function load_convo(list_option) {
+        
+        if (list_option == "single"){
+            $("#convo_list_holder").empty();
+        }
+        else{
+            $("#convo_holder").empty();
+        }
+        
+        // AJAX request to retreive conversation data. List option being phone_number or blank. 
+        $.ajax({
+            url: 'http://localhost:5000/load_convo',
+            type: 'GET',
+            cache: false,
+            data: {list_option: list_option},
+            error: function (request, status, error) {
+             alert(error)
+            },
+            success: function (data) {      
+                // When the sms conversations are loaded, render them in speech bubbles
+                $(data).each(function (i, val) {
+                    var bubble = "";
+                    debugger
+                    if (list_option == "single"){
+                        var bubble = "<hgroup onclick='load_sms(" + val[7] + ")' class='speech-bubble-none'>";
+                    }
+                    else{
+                        if (val[12] == "outbound") { //determines direction of the speech bubble
+                           
+                            var bubble = "<hgroup class='speech-bubble-right'>";
+                        }
+                        else {
+                            var bubble = "<hgroup class='speech-bubble-left'>";   
+                        }
+                    }
+                    // Format time from the data to be sent in the speech bubbles
+                    var selectedMonthName = months[val[3]-1];
+                    var sent_date = selectedMonthName + " " + val[4]; // example: "June 20"
+
+                    var currentMinutes = val[6];
+                    if (val[6].toString().length == 1) {
+                        currentMinutes = "0" + currentMinutes;
+                    }
+
+                    var sent_time = val[5] + ":" + currentMinutes;
+                    
+                    if (list_option == "single"){
+                        debugger
+                        var sms_seen = "";
+                        if(val[17] == null){
+                            sms_seen = "New!";  // New text message, display indicator
+                        }
+                        bubble += "<label style='color:red';margin-right:5px;float:left;clear:none;>" + sms_seen + "  </label><label style='margin-left:5px;'>" + sent_date + "  " + val[18] + " " + val[19] + ":</label>";
+                        bubble += "<h5>" + val[8] + "</h5>"
+                    }
+                    else{
+                        
+                        bubble += "<h5>" + sent_date + "  " + val[18] + " " + val[19] + "    (" + val[11] + "):</h5>";
+                        bubble += "<h5>" + val[8] + "</h5>"
+                    }
+                    if (val[16] != null) {
+                        
+                        if (val[20] != null) {
+                           
+                            if (list_option == "single"){
+                                // bubble += val[18];
+                            }
+                            else{
+                                debugger
+                                _src = "/static/images/" + val[20];
+                            bubble += "<a href='#'  onclick=view_media('" + _src + "')><img  src='" + _src + "' alt='media'  width='100' height='100'></a>"
+                                bubble += "<br><img  id=" + val[20] + ">";
+                            }
+                         
+                        }
+                        else{
+                            bubble += ""
+                        }
+                        
+
+
+
+                        
+
+                        // bubble += "<label style='color:whitesmoke;' class='glyphicon glyphicon-paperclip'></label><a style='color:yellow;' href='' onclick=view_attachement(" + val[14] + ")> Click to view Attachment</a>"
+                        
+                      
+                    }
+                    bubble += "</hgroup>";
+                    
+                    if (list_option == "single"){
+                        $("#convo_list_holder").append(bubble);
+                     
+                    }
+                    else{
+                        $("#convo_holder").append(bubble);
+                    
+                    }
+                  
+                });
+
+               
+                $(".scroll_phone_book").animate({ scrollTop: 30000}, 1000);
+       
+            }
+        });
+    }
+
+    /**
+     * Displays media in the image preview and sets the modal to display the large image
+     * 
+     * @function view_media
+     * @param {string} media_id - the id of the doc, pdf, jpg, or jpeg attachment.
+     */ 
+    function view_media(media_id) {
+       
+       
+        $('#imagepreview').attr('src',media_id); 
+        $('#imagemodal').modal('show'); 
+
+    }
+
+/**
+ * Converts the current time from 24 hour format to AM/PM time.
+ * 
+ * @function convertTime24to12
+ * @param {string} time24 - time in 24 hour format HH:MM
+ * @returns {string} time12 - time in hh:mm [am|pm]
+ * 
+ */
+    function convertTime24to12(time24) {
+        var tmpArr = time24.split(':'), time12;
+        // type coersion to string
+        if (+tmpArr[0] == 12) {
+            time12 = tmpArr[0] + ':' + tmpArr[1] + ' pm';
+        } else {
+            // type coersion to string
+            if (+tmpArr[0] == 00) {
+                time12 = '12:' + tmpArr[1] + ' am';
+            } else {
+                // type coersion to string
+                if (+tmpArr[0] > 12) {
+                    // type coersion to string
+                    time12 = (+tmpArr[0] - 12) + ':' + tmpArr[1] + ' pm';
+                } else {
+                    // type coersion to string
+                    time12 = (+tmpArr[0]) + ':' + tmpArr[1] + ' am';
+                }
+            }
+        }
+        return time12;
+    }
+
+
+</script>
+
+
+
+
+
+<script>
+
+    /**
+     * This function is an eventhandler that gets called keyUp event and is used to filter the *phone_book_list table's display.
+     * 
+     * @callback myFunction
+     * @listens keyUp
+     * 
+     */
+    function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("phone_book_list");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            td2 = tr[i].getElementsByTagName("td")[2];
+            if (td || td2) {
+                // if there isn't a match from the search characters, hide the row
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1 || td2.innerHTML.toUpperCase().indexOf(filter) > -1) { 
+                    tr[i].style.display = "";
+                }
+                else {
+                    tr[i].style.display = "none";
+                }
+            
+            }
+
+        }
+    }
+
+    /**
+     * Eventhandler for table head in phone_book_list. Used to sort asc or desc order of the *selected column.
+     * 
+     * @callback sortTable
+     * @listens click
+     * @param {number} n - Indicates the column number to sort on.
+     * 
+     */
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("phone_book_list");
+        switching = true;
+        dir = "asc";
+        // Loop is used to determine and flag whether the current row and the next row should switch places based on 'asc' or 'desc' sort order
+        while (switching) {
+            switching = false;
+            rows = table.getElementsByTagName("TR");
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            // Manipulates the DOM based on shouldSwitch flag
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+    
+    // Get the modal
+
+
+
+</script>
+
+
+
+
+
+<style>
+    /*.input-file {
+            position: relative;
+        }
+            /* Remove margin, it is just for stackoverflow viewing */
+    .input-file .input-group-addon {
+        border: 0px;
+        padding: 0px;
+    }
+
+    /*.input-file .input-group-addon .btn {
+                    border-radius: 0 4px 4px 0
+                }*/
+
+    /*.input-file .input-group-addon input {
+                    cursor: pointer;
+                    position: absolute;
+
+                    z-index: 2;
+                    top: 0;
+                    right: 0;
+                    filter: alpha(opacity=0);
+                    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+                    opacity: 0;
+                    background-color: transparent;
+                    color: transparent;
+                }*/
+
+
+    /*@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+
+        /* Styles */
+    /** {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Open Sans";
+            font-size: 14px;
+        }*/
+
+*.container {
+            
+        }
+
+    /*.container {
+            width: 500px;
+            margin: 25px auto;
+        }
+
+        form {
+            padding: 20px;
+            background: #2c3e50;
+            color: #fff;
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
+        }
+
+            form label,
+            form input,
+            form button {
+                border: 0;
+                margin-bottom: 3px;
+                display: block;
+                width: 100%;
+            }
+
+            form input {
+                height: 25px;
+                line-height: 25px;
+                background: #fff;
+                color: #000;
+                padding: 0 6px;
+                -moz-box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+
+            form button {
+                height: 30px;
+                line-height: 30px;
+                background: #e67e22;
+                color: #fff;
+                margin-top: 10px;
+                cursor: pointer;
+            }*/
+
+    form .error {
+        color: #ff0000;
+    }
+</style>
+
+
+
+
+
+
+
+<style>
+    .center {
+        padding: 70px 0;
+      
+        text-align: center;
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    form .error {
+        color: #ff0000;
+    }
+
+
+
+    /* put toggle bars on the left :: not using button */
+    #slide-nav .navbar-toggle {
+        cursor: pointer;
+        position: relative;
+        line-height: 0;
+        float: left;
+        margin: 0;
+        width: 30px;
+        height: 40px;
+        padding: 10px 0 0 0;
+        border: 0;
+        background: transparent;
+    }
+        /* icon bar prettyup - optional */
+        #slide-nav .navbar-toggle > .icon-bar {
+            width: 100%;
+            display: block;
+            height: 3px;
+            margin: 5px 0 0 0;
+        }
+
+        #slide-nav .navbar-toggle.slide-active .icon-bar {
+            background: orange
+        }
+
+    .navbar-header {
+        position: relative
+    }
+    /* un fix the navbar when active so that all the menu items are accessible */
+    .navbar.navbar-fixed-top.slide-active {
+        position: relative
+    }
+    /* screw writing importants and shit, just stick it in max width since these classes are not shared between sizes */
+   
+
+        #slide-nav .navbar-header {
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+.navbar-toggle.slide-active
+
+
+        #slide-nav .navbar.slide-active {
+            position: absolute;
+            width: 80%;
+            top: -1px;
+            z-index: 1000;
+        }
+
+        #slide-nav #slidemenu {
+            background: #f7f7f7;
+            left: -100%;
+            width: 80%;
+            min-width: 0;
+            position: absolute;
+            padding-left: 0;
+            z-index: 2;
+            top: -8px;
+            margin: 0;
+        }
+
+            #slide-nav #slidemenu .navbar-nav {
+                min-width: 0;
+                width: 100%;
+                margin: 0;
+            }
+
+                #slide-nav #slidemenu .navbar-nav .dropdown-menu li a {
+                    min-width: 0;
+                    width: 80%;
+                    white-space: normal;
+                }
+
+        #slide-nav {
+            border-top: 0
+        }
+
+            #slide-nav.navbar-inverse #slidemenu {
+                background: #333
+            }
+        /* this is behind the navigation but the navigation is not inside it so that the navigation is accessible and scrolls*/
+        #navbar-height-col {
+            position: fixed;
+            top: 0;
+            height: 100%;
+            bottom: 0;
+            width: 80%;
+            left: -80%;
+            background: #f7f7f7;
+        }
+
+            #navbar-height-col.inverse {
+                background: #333;
+                z-index: 1;
+                border: 0;
+            }
+
+        #slide-nav .navbar-form {
+            width: 100%;
+            margin: 8px 0;
+            text-align: center;
+            overflow: hidden;
+            /*fast clearfixer*/
+        }
+
+            #slide-nav .navbar-form .form-control {
+                text-align: center
+            }
+
+            #slide-nav .navbar-form .btn {
+                width: 100%
+            }
+
+
+</style>
+
+
+
+
+
+
+
+
+<style>
+    .speech-bubble-left {
+        position: relative;
+        background: #00aabb;
+        border-radius: .4em;
+        padding-left: 10px;
+        margin-bottom: 10px;
+        width: 60%;
+        float: right;
+        clear: both;
+    }
+
+        .speech-bubble-left:after {
+            /*content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 0;
+            height: 0;
+            border: 14px solid transparent;
+            border-right-color: #00aabb;
+            border-left: 0;
+            border-bottom: 0;
+            margin-top: -7px;
+            margin-left: -14px;*/
+        }
+
+
+    .speech-bubble-right {
+        position: relative;
+        background: #00aabb;
+        border-radius: .4em;
+        padding-left: 10px;
+        margin-bottom: 10px;
+        width: 60%;
+        float: left;
+        clear: both;
+        
+    }
+    .speech-bubble-none {
+        position: relative;
+        background: whitesmoke;
+        cursor: pointer;
+        padding-left: 10px;
+        margin-bottom: 10px;
+        width: 99%;
+        float: left;
+        clear: both;
+        
+    }
+        /*.speech-bubble-right:after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 0;
+            height: 0;
+            border: 14px solid transparent;
+            border-left-color: #00aabb;
+            border-right: 0;
+            border-bottom: 0;
+            margin-top: -7px;
+            margin-right: -14px;
+        }*/
+</style>
+
+
+
+
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    #myInput {
+
+        background-position: 10px 10px;
+        background-repeat: no-repeat;
+        width: 100%;
+        font-size: 16px;
+        /*padding: 12px 20px 12px 40px;*/
+        border: 1px solid #ddd;
+        margin-bottom: 12px;
+    }
+
+    #phone_book_list {
+        border-collapse: collapse;
+        width: 100%;
+        border: 1px solid #ddd;
+        font-size: 18px;
+    }
+
+        #phone_book_list th, #phone_book_list td {
+            text-align: left;
+            padding: 12px;
+        }
+
+        #phone_book_list tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+            #phone_book_list tr.header, #phone_book_list tr:hover {
+                background-color: #f1f1f1;
+            }
+
+
+    th {
+        cursor: pointer;
+    }
+</style>
+{% endblock body %}
