@@ -46,8 +46,8 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 ALLOWED_EXTENSIONS = ['xlx', 'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif']
 
 # Twilio API Connection
-account_sid = "ACa301c39d41574755e49f1fca1713698f"
-auth_token = "94e62d89637849b2d690d10bdf3d0dec"
+account_sid = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+auth_token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 client = Client(account_sid, auth_token)
 BASE_URL = "https://%s:%s@api.twilio.com" % (account_sid, auth_token)
 
